@@ -42,7 +42,7 @@ class MCPServer:
                 result = {
                     "protocolVersion": "2025-06-18",
                     "capabilities": {"tools": {"listChanged": False}},
-                    "serverInfo": {"name": "agentcontrolbench-synthetic-lab", "version": "0.1.0"},
+                    "serverInfo": {"name": "agentcontrolbench-synthetic-lab", "version": "0.1.1"},
                 }
         elif not self.ready:
             error = {"code": -32002, "message": "initialize and initialized notification required"}

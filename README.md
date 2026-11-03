@@ -70,3 +70,5 @@ Python 3.12+, Pydantic, FastAPI, HTTPX, Uvicorn and dependency-free browser Java
 External model calls are disabled by default. Explicit request/token/spend ceilings and a conservative operator-supplied tariff are required for cloud use. Provider billing cannot be guaranteed by a client. The web console runs simulations only. Use synthetic data and keep the server on loopback.
 
 Licensed under [Apache-2.0](LICENSE). An independent open-source AI safety research initiative.
+
+Native security audit: [v0.1.1 finding, remediation and scope](docs/security-audit.md).

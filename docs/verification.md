@@ -15,3 +15,7 @@ Python 3.12.16: 26 pytest tests passed; 95.82% branch-inclusive core coverage. T
 Fresh wheel installation verified hashed runtime dependencies, exact experiment observations and source fingerprints, plus the installed dashboard/API. See [installation evidence](../results/installation-verification.json). Mobile layout checks observed a 375 px content viewport with no horizontal page overflow; desktop checks used the 1440×1000 breakpoint. Long scenario JSON loads on demand to keep filtering responsive.
 
 The expanded typed tool laboratory and selectable MCP scopes passed 33 pytest tests with 96.33% branch-inclusive coverage. Tests verify each domain mutation, idempotent cloud/role operations, unknown-resource/domain denial and all six authorized scopes through MCP.
+
+## v0.1.1 security patch verification
+
+Python 3.12.16: 43 pytest tests passed with 97.33% branch-inclusive coverage. All ten new provider JSON regression tests passed; the excessive-nesting test failed against the original implementation. Three Node dashboard tests, Ruff lint/format, strict mypy and Bandit passed. A fresh read-only reviewer found no concrete surviving bypass or regression in the patch. The existing TestClient deprecation warning remains visible. See [audit scope and remediation](security-audit.md).
