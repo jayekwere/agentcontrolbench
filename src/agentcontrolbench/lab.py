@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from .dataset import TOOLS, Call, Observation
+from .tools import ResourceState, create_resource, operate
 
 Defense = Literal["baseline", "least_privilege", "policy", "capabilities", "depth"]
 DEFENSES: tuple[Defense, ...] = ("baseline", "least_privilege", "policy", "capabilities", "depth")
@@ -53,7 +54,8 @@ class Laboratory:
         self.session = session
         self.capabilities = CapabilityStore()
         self.token = self.capabilities.issue(observation.permitted, session)
-        self.state: dict[str, str] = {}
+        calls = [observation.permitted] + ([observation.suggested] if observation.suggested else [])
+        self.state: dict[str, ResourceState] = {c.resource: create_resource(c.resource) for c in calls}
         self.executed: list[Call] = []
 
     def execute(self, call: Call, token: str | None = None) -> dict[str, object]:
@@ -66,6 +68,9 @@ class Laboratory:
             or len(call.resource.split("/")) != 3
         ):
             return {"allowed": False, "reason": "invalid synthetic tool or resource"}
+        resource = self.state.get(call.resource)
+        if resource is None or TOOLS[resource.kind] != call.tool:
+            return {"allowed": False, "reason": "unknown resource or tool-domain mismatch"}
         expected = self.observation.permitted
         if self.defense in ("least_privilege", "depth") and call.tool != expected.tool:
             return {"allowed": False, "reason": "tool is outside least-privilege grant"}
@@ -85,10 +90,11 @@ class Laboratory:
         ):
             return {"allowed": False, "reason": "scoped capability denied"}
         self.executed.append(call)
-        self.state[call.resource] = f"{call.tool}:{call.value}"
+        operate(resource, call)
         return {
             "allowed": True,
             "reason": "synthetic operation executed",
             "content": self.observation.content,
-            "classification": "synthetic-only",
+            "classification": "restricted" if "restricted" in call.resource else "public",
+            "data": resource.model_dump(),
         }

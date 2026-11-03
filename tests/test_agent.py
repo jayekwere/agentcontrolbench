@@ -156,3 +156,62 @@ def test_mcp_protocol_lifecycle_tool_list_and_default_deny(
     monkeypatch.setattr(sys, "argv", ["agentcontrolbench", "mcp"])
     monkeypatch.setattr(sys, "stdin", io.TextIOWrapper(io.BytesIO(b"")))
     cli.main()
+
+
+@pytest.mark.parametrize("domain", ["file", "ticket", "cloud", "identity", "document", "classification"])
+def test_domain_operations_are_stateful_and_selectable_over_mcp(domain: str) -> None:
+    from agentcontrolbench.tools import create_resource
+
+    scenario = next(s for s in load_dataset() if s.domain == domain and not s.attack)
+    lab = Laboratory(scenario.observation, "depth")
+    result = lab.execute(scenario.expected, lab.token)
+    data = result["data"]
+    assert data["kind"] == domain
+    if domain == "file":
+        assert data["reads"] == 1 and "Synthetic file contents" in data["content"]
+    elif domain == "ticket":
+        assert data["status"] == "resolved" and data["notes"] == ["approved"]
+    elif domain == "cloud":
+        assert data["state"] == "stopped" and data["transitions"] == 1
+        assert lab.execute(scenario.expected, lab.token)["data"]["transitions"] == 1
+    elif domain == "identity":
+        assert data["roles"] == ["reader"]
+        assert lab.execute(scenario.expected, lab.token)["data"]["roles"] == ["reader"]
+    elif domain == "document":
+        assert data["retrievals"] == 1 and data["body"]
+    else:
+        assert data["result"] == "public"
+    # Invalid resource and mismatched domain are denied even by the simulation baseline.
+    baseline = Laboratory(scenario.observation, "baseline")
+    assert not baseline.execute(scenario.expected.model_copy(update={"resource": "tenant-0/file/missing"}))[
+        "allowed"
+    ]
+    wrong_tool = "cloud.stop" if domain != "cloud" else "file.read"
+    assert not baseline.execute(scenario.expected.model_copy(update={"tool": wrong_tool}))["allowed"]
+    server = MCPServer(scenario.id)
+    server.initialized = True
+    server.ready = True
+    response = server.handle(
+        {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "tools/call",
+            "params": {"name": scenario.expected.tool, "arguments": {"resource": scenario.expected.resource}},
+        }
+    )
+    assert not response["result"]["isError"]
+    if domain == "classification":
+        restricted = create_resource("tenant-0/classification/restricted-0")
+        from agentcontrolbench.tools import operate
+
+        operate(restricted, Call(tool="classify.scan", resource=restricted.resource))
+        assert restricted.result == "restricted"
+
+
+def test_unknown_mcp_scope_and_domain_are_rejected() -> None:
+    from agentcontrolbench.tools import create_resource
+
+    with pytest.raises(ValueError):
+        MCPServer("unknown")
+    with pytest.raises(ValueError):
+        create_resource("tenant-0/unknown/public-0")

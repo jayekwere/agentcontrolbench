@@ -14,10 +14,14 @@ from .lab import Laboratory
 
 
 class MCPServer:
-    def __init__(self) -> None:
+    def __init__(self, scenario_id: str | None = None) -> None:
         self.initialized = False
         self.ready = False
-        self.lab = Laboratory(load_dataset()[0].observation, "depth")
+        cases = load_dataset()
+        selected = next((s for s in cases if s.id == scenario_id), None) if scenario_id else cases[0]
+        if selected is None:
+            raise ValueError("unknown synthetic scenario scope")
+        self.lab = Laboratory(selected.observation, "depth")
 
     def handle(self, message: dict[str, Any]) -> dict[str, Any] | None:
         request_id = message.get("id")
@@ -84,8 +88,8 @@ class MCPServer:
         return {"jsonrpc": "2.0", "id": request_id, **({"error": error} if error else {"result": result})}
 
 
-def serve_stdio() -> None:
-    server = MCPServer()
+def serve_stdio(scenario_id: str | None = None) -> None:
+    server = MCPServer(scenario_id)
     for _ in range(10000):
         line = sys.stdin.buffer.readline(16385)
         if not line:

@@ -13,3 +13,5 @@ Tests verify concrete invariants; passing them is not a guarantee against every 
 Python 3.12.16: 26 pytest tests passed; 95.82% branch-inclusive core coverage. Three Node dashboard tests passed. Ruff, strict mypy and Bandit passed. Saved observations and source fingerprints reproduced. The single TestClient deprecation warning is retained; it does not affect the passing assertions. GitHub Actions verifies the final published commit separately.
 
 Fresh wheel installation verified hashed runtime dependencies, exact experiment observations and source fingerprints, plus the installed dashboard/API. See [installation evidence](../results/installation-verification.json). Mobile layout checks observed a 375 px content viewport with no horizontal page overflow; desktop checks used the 1440×1000 breakpoint. Long scenario JSON loads on demand to keep filtering responsive.
+
+The expanded typed tool laboratory and selectable MCP scopes passed 33 pytest tests with 96.33% branch-inclusive coverage. Tests verify each domain mutation, idempotent cloud/role operations, unknown-resource/domain denial and all six authorized scopes through MCP.

@@ -26,7 +26,8 @@ def main() -> None:
     data.add_argument("--output", type=Path, default=Path("runs/dataset.json"))
     serve = sub.add_parser("serve", help="serve the local dashboard")
     serve.add_argument("--port", type=int, default=8080)
-    sub.add_parser("mcp", help="run isolated MCP stdio laboratory")
+    mcp = sub.add_parser("mcp", help="run isolated MCP stdio laboratory")
+    mcp.add_argument("--scenario-id", help="trusted task scope selected from the synthetic dataset")
     args = parser.parse_args()
     try:
         if args.command == "run":
@@ -68,7 +69,7 @@ def main() -> None:
         else:
             from .mcp import serve_stdio
 
-            serve_stdio()
+            serve_stdio(args.scenario_id)
     except (ValueError, OSError) as exc:
         print(
             json.dumps(

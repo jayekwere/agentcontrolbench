@@ -33,7 +33,7 @@ Open [127.0.0.1:8080](http://127.0.0.1:8080). Browse scenarios, filter strategie
 - Externally enforced tenant/tool/argument checks; capabilities bind exact scope, session, expiry and use count.
 - 162 validated factorial cases with unique identifiers, explicit expected outcomes and family-separated development/evaluation sets.
 - Unauthorized-action, bypass, completion and false-block metrics; unique-scenario Wilson intervals; actual latency and provider usage accounting.
-- MCP **2025-06-18** stdio subset: initialize/initialized, ping, tools/list and tools/call. Launch `uv run agentcontrolbench mcp`; the default depth policy permits only `file.read` on `tenant-0/file/public-0`. This is a documented legacy subset, not a claim of support for every MCP transport or newer protocol extension.
+- MCP **2025-06-18** stdio subset: initialize/initialized, ping, tools/list and tools/call. Launch `uv run agentcontrolbench mcp`; the default depth policy permits only `file.read` on `tenant-0/file/public-0`. Choose a different trusted task scope with `mcp --scenario-id acb-ticket-0-benign_read`; all six domains have typed, stateful operations tested over MCP. This is a documented legacy subset, not a claim of support for every MCP transport or newer protocol extension.
 - Original responsive, light/dark research console with scenario search, trace inspection, charts, configuration and exports.
 
 ## What was measured

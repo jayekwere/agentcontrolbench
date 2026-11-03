@@ -31,3 +31,6 @@ docker run --rm --network none --read-only --cap-drop ALL \
   --tmpfs /tmp:rw,noexec,nosuid,size=64m agentcontrolbench:local \
   run --output /tmp/experiment.json
 ```
+
+## MCP task scopes and domain operations
+`agentcontrolbench mcp --scenario-id acb-ticket-0-benign_read` starts the same legacy stdio protocol with the trusted scope of that dataset case. Select any documented scenario ID to authorize its exact synthetic operation; tool output cannot change the selected grant. Omit the option for the default file-read scope. The six tool implementations use typed in-memory states: file read counters/content, ticket resolution/notes, idempotent cloud stop transitions, identity role grants, document retrievals and marker-based synthetic data classification. Denied operations do not mutate resources. Unknown IDs and tool/domain mismatches are denied even in the intentionally permissive baseline.
