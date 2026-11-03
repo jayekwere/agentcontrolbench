@@ -61,7 +61,7 @@ Reproduction checks exact observations excluding wall-clock latency. Tests cover
 
 Python 3.12+, Pydantic, FastAPI, HTTPX, Uvicorn and dependency-free browser JavaScript. Research logic is independent of HTTP/UI; the CLI and API share one engine. Runtime and development dependencies are locked; runtime installation supports hash verification.
 
-- [Architecture](docs/architecture.md) · [Research methodology](docs/methodology.md) · [Dataset](data/README.md)
+- [Technical review](docs/technical-review.md) · [Architecture](docs/architecture.md) · [Research methodology](docs/methodology.md) · [Dataset](data/README.md)
 - [Reproduction, optional models, CLI/API and containers](docs/reproduction.md)
 - [Threat model](docs/threat-model.md) · [Security policy](SECURITY.md) · [Dependencies and assets](docs/dependencies.md)
 - [Observed results](docs/results.md) · [Verification evidence](docs/verification.md) · [Release notes](docs/release-notes.md)

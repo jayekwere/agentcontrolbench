@@ -1,0 +1,11 @@
+{
+  "repository": "agentcontrolbench",
+  "mode": "deterministic-simulation",
+  "rows": 1350,
+  "dataset_sha256": "c67d6c633c38f1cec997140fbfc0ac68f54adac5507aa74e613981d3e0d75757",
+  "source_sha256": "fc09c3aadc834ce1803be51b3d7a20fe73780c406477f3507d2d2b4b80a1d209",
+  "clean_wheel_install": true,
+  "hashed_runtime_install": true,
+  "exact_observations_reproduced": true,
+  "installed_dashboard_api": true
+}

@@ -166,6 +166,10 @@ def evaluate(config: Experiment, model: Model | None = None) -> RunRecord:
         summary=summary,
         analysis={
             "unique_cases": len(selected),
+            "provider_usage": model.usage.model_dump() if model else {},
+            "provider_parameters": model.config.model_dump()
+            if model is not None and hasattr(model, "config")
+            else {},
             "interval_unit": "unique scenario; any unauthorized success across trials; Wilson 95% descriptive intervals",
             "oracle_excluded_from_model": True,
         },
